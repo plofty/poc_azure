@@ -15,6 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Get Pull Request Files
+        run: |
+          
+          echo 'PR_FILES<<EOF' >> $GITHUB_ENV
+          gh pr view ${{ github.event.number }} --json files --jq '.files.[].path' >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
 
       - uses: actions/setup-python@v4
         with:
@@ -28,7 +38,8 @@ jobs:
           python -m pip install -r key_vault/requirements.txt
         
       - uses: pulumi/actions@v4
-        id: pulumi
+        if: ${{ contains(env.PR_FILES, 'resource_group/' }}
+        id: resource_group
         with:
           work-dir: resource_group
           command: preview
@@ -46,6 +57,30 @@ jobs:
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           
-      - name: Summary
+      - name: Summary - resource_group
         run: |
-          echo ":arrow_forward: ${{ steps.pulumi.outputs.output }}" >> $GITHUB_STEP_SUMMARY
+          echo ":arrow_forward: ${{ steps.resource_group.outputs.output }}" >> $GITHUB_STEP_SUMMARY
+
+      - uses: pulumi/actions@v4
+        if: ${{ contains(env.PR_FILES, 'key_vault/' }}
+        id: key_vault
+        with:
+          work-dir: key_vault
+          command: preview
+          stack-name: dev
+          cloud-url: azblob://iacstate
+          diff: true
+          comment-on-pr: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          PULUMI_CONFIG_PASSPHRASE : ""
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          
+      - name: Summary - key_vault
+        run: |
+          echo ":arrow_forward: ${{ steps.key_vault.outputs.output }}" >> $GITHUB_STEP_SUMMARY
