@@ -35,6 +35,7 @@ jobs:
       - uses: pulumi/actions@v4
         id: pulumi
         with:
+          work-dir: resource_group
           command: preview
           stack-name: dev
           cloud-url: azblob://iacstate
