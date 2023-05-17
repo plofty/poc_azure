@@ -38,7 +38,7 @@ jobs:
           python -m pip install -r key_vault/requirements.txt
         
       - uses: pulumi/actions@v4
-        if: ${{ contains(env.PR_FILES, 'resource_group/' }}
+        if: ${{ contains(env.PR_FILES, 'resource_group/') }}
         id: resource_group
         with:
           work-dir: resource_group
@@ -62,7 +62,7 @@ jobs:
           echo ":arrow_forward: ${{ steps.resource_group.outputs.output }}" >> $GITHUB_STEP_SUMMARY
 
       - uses: pulumi/actions@v4
-        if: ${{ contains(env.PR_FILES, 'key_vault/' }}
+        if: ${{ contains(env.PR_FILES, 'key_vault/') }}
         id: key_vault
         with:
           work-dir: key_vault
