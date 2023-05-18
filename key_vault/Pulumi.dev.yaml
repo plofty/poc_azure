@@ -1,2 +1,3 @@
 encryptionsalt: v1:YgWjDQQ4vRk=:v1:21yiAqQlzCyBT+wQ:SllzGR+vGZdSmgEhb244qL7lPaTxrA==
 config:
+  key_vault:tags: '{"tag1": "asdf"}'

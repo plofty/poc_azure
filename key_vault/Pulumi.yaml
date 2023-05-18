@@ -4,3 +4,5 @@ runtime:
   options:
     virtualenv: venv
 description: A minimal Azure Native Python Pulumi program
+backend:
+  url: azblob://iacstate
