@@ -37,7 +37,8 @@ jobs:
           python -m pip install -r resource_group/requirements.txt
           python -m pip install -r key_vault/requirements.txt
         
-      - uses: pulumi/actions@v4
+      - name: Resource Group - Pulumi preview
+        uses: pulumi/actions@v4
         if: ${{ contains(env.PR_FILES, 'resource_group/') }}
         id: resource_group
         with:
@@ -57,11 +58,13 @@ jobs:
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           
-      - name: Summary - resource_group
+      - name: Resource Group - Summary
+        if: ${{ steps.resource_group.outcome == 'success' }}
         run: |
           echo ":arrow_forward: ${{ steps.resource_group.outputs.output }}" >> $GITHUB_STEP_SUMMARY
 
-      - uses: pulumi/actions@v4
+      - name: Key Vault - Pulumi preview
+        uses: pulumi/actions@v4
         if: ${{ contains(env.PR_FILES, 'key_vault/') }}
         id: key_vault
         with:
@@ -81,6 +84,6 @@ jobs:
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           
-      - name: Summary - key_vault
+      - name: Key Vault - Summary
         run: |
           echo ":arrow_forward: ${{ steps.key_vault.outputs.output }}" >> $GITHUB_STEP_SUMMARY
