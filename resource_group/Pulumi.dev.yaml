@@ -1,6 +1,6 @@
 encryptionsalt: v1:pAXlZLtQ+Eg=:v1:BOGwPKEVXnFrS9TB:bPc4pZ23z11KUakvYbQgjElVXXRTXg==
 config:
   resource_group:region: westus2
-  resource_group:tags: '{"tag1": "asdf", "tag2": "1234", "tag3": "123asdfasdf4"}'
+  resource_group:tags: '{"tag1": "asdf", "tag2": "1234", "tag3": "123"}'
   resource_group:tenant_id:
     secure: v1:JRVbvc4BSeSq5yLO:Raj7bkvuwSw4HqUMeW7Fr0CvCjaUHNdv9twvTGjlKN+xEQ7mneHKjYjxdFERRFctvmMWlg==

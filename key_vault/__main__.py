@@ -10,6 +10,10 @@ resource_group_name = resource_group_project.get_output("resource_group_name")
 # Get the resource group details from azure
 resource_group = resources.get_resource_group(resource_group_name=resource_group_name)
 
+# Get configuration values
+config = pulumi.Config()
+tags = config.require_object("tags")
+
 # Get the current stack name
 stack_name = pulumi.get_stack()
 
