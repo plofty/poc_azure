@@ -85,5 +85,6 @@ jobs:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           
       - name: Key Vault - Summary
+        if: ${{ steps.key_vault.outcome == 'success' }}
         run: |
           echo ":arrow_forward: ${{ steps.key_vault.outputs.output }}" >> $GITHUB_STEP_SUMMARY
